@@ -5,13 +5,13 @@ CFLAGS += -Wall -Wextra -Wpedantic -Wmissing-prototypes -Wredundant-decls \
 SABERFLAGS = -march=native -mtune=native -O3 -fomit-frame-pointer
 RM = /bin/rm
 
-HEADERS = params.h polyvec.h poly.h cbd.h aes256ctr.h randombytes.h consts256.h consts512.h consts1024.h fq.inc shuffle.inc
+HEADERS = params.h polyvec.h poly.h cbd.h aes256ctr.h randombytes.h consts256.h fq.inc shuffle.inc
 SOURCES = poly.c cbd.c aes256ctr.c randombytes.c
-SOURCES256N = $(SOURCES) ntt256n.S invntt256n.S basemul256x1.S
+SOURCES256N = $(SOURCES) ntt256n.S invntt256n.S basemul256x1.S consts256n7681.c consts256n10753.c
 OBJECTS = aes256ctr.o
-OBJECTS256NX2 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x2.o
-OBJECTS256NX3 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x3.o
-OBJECTS256NX4 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x4.o
+OBJECTS256NX2 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x2.o consts256n7681.o consts256n10753.o
+OBJECTS256NX3 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x3.o consts256n7681.o consts256n10753.o
+OBJECTS256NX4 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x4.o consts256n7681.o consts256n10753.o
 
 .PHONY: all clean
 
