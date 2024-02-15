@@ -2,6 +2,7 @@
 #define CBD_H
 
 #include <stdint.h>
+
 #include "params.h"
 
 #define cbd POLYMUL_NAMESPACE(_cbd)

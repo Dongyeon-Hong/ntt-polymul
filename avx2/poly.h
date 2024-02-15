@@ -2,20 +2,20 @@
 #define POLY_H
 
 #include <stdint.h>
+
 #include "params.h"
 
-typedef struct{
-  __attribute__((aligned(32)))
-  int16_t coeffs[POLY_N];
+typedef struct {
+    __attribute__((aligned(32))) int16_t coeffs[POLY_N];
 } poly;
 
-typedef struct{
-  __attribute__((aligned(32)))
-  int16_t coeffs[NTT_N];
+typedef struct {
+    __attribute__((aligned(32))) int16_t coeffs[NTT_N];
 } nttpoly;
 
 #define poly_uniform POLYMUL_NAMESPACE(_poly_uniform)
-void poly_uniform(poly *r, const uint8_t seed[POLYMUL_SYMBYTES], uint16_t nonce);
+void poly_uniform(poly *r, const uint8_t seed[POLYMUL_SYMBYTES],
+                  uint16_t nonce);
 #define poly_noise POLYMUL_NAMESPACE(_poly_noise)
 void poly_noise(poly *r, const uint8_t seed[POLYMUL_SYMBYTES], uint16_t nonce);
 
@@ -25,7 +25,8 @@ void poly_ntt(nttpoly *r, const poly *a, const int16_t *pdata);
 void poly_invntt_tomont(nttpoly *r, const nttpoly *a, const int16_t *pdata);
 
 #define poly_basemul_montgomery POLYMUL_NAMESPACE(_poly_basemul_montgomery)
-void poly_basemul_montgomery(nttpoly *r, const nttpoly *a, const nttpoly *b, const int16_t *pdata);
+void poly_basemul_montgomery(nttpoly *r, const nttpoly *a, const nttpoly *b,
+                             const int16_t *pdata);
 #define poly_crt POLYMUL_NAMESPACE(_poly_crt)
 void poly_crt(poly *r, const nttpoly *a, const nttpoly *b);
 
