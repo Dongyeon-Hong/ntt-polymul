@@ -9,9 +9,6 @@ HEADERS = params.h polyvec.h poly.h cbd.h aes256ctr.h randombytes.h consts256.h 
 SOURCES = poly.c cbd.c aes256ctr.c randombytes.c
 SOURCES256N = $(SOURCES) ntt256n.S invntt256n.S basemul256x1.S consts256n7681.c consts256n10753.c
 OBJECTS = aes256ctr.o
-OBJECTS256NX2 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x2.o consts256n7681.o consts256n10753.o
-OBJECTS256NX3 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x3.o consts256n7681.o consts256n10753.o
-OBJECTS256NX4 = $(OBJECTS) cbd256.o ntt256n.o invntt256n.o basemul256x1x4.o consts256n7681.o consts256n10753.o
 
 .PHONY: all clean
 
@@ -27,37 +24,11 @@ all: \
   test_sabermul \
   test_firesabermul \
 
-lib: \
-  liblightsabermul.a \
-  libsabermul.a \
-  libfiresabermul.a \
-
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 %.o: %.S $(HEADERS)
 	$(CC) $(CFLAGS) -c -o $@ $<
-
-cbd256.o: cbd.c $(HEADERS)
-	$(CC) $(CFLAGS) -DKEM_N=256 -c -o $@ $<
-
-poly_lightsaber.o: poly.c $(HEADERS)
-	$(CC) $(CFLAGS) -DLIGHTSABER -c -o $@ $<
-
-poly_saber.o: poly.c $(HEADERS)
-	$(CC) $(CFLAGS) -DSABER -c -o $@ $<
-
-poly_firesaber.o: poly.c $(HEADERS)
-	$(CC) $(CFLAGS) -DFIRESABER -c -o $@ $<
-
-polyvec_lightsaber.o: polyvec.c $(HEADERS)
-	$(CC) $(CFLAGS) -DLIGHTSABER -c -o $@ $<
-
-polyvec_saber.o: polyvec.c $(HEADERS)
-	$(CC) $(CFLAGS) -DSABER -c -o $@ $<
-
-polyvec_firesaber.o: polyvec.c $(HEADERS)
-	$(CC) $(CFLAGS) -DFIRESABER -c -o $@ $<
 
 sabermul/lightsabermul.o: sabermul/consts.h sabermul/matrix.c sabermul/scm_avx.c sabermul/sabermul.c sabermul/toom-cook_4way.c $(HEADERS)
 	$(CC) $(SABERFLAGS) -DLIGHTSABER sabermul/sabermul.c -c -o $@
@@ -67,24 +38,6 @@ sabermul/sabermul.o: sabermul/consts.h sabermul/matrix.c sabermul/scm_avx.c sabe
 
 sabermul/firesabermul.o: sabermul/consts.h sabermul/matrix.c sabermul/scm_avx.c sabermul/sabermul.c sabermul/toom-cook_4way.c $(HEADERS)
 	$(CC) $(SABERFLAGS) -DFIRESABER sabermul/sabermul.c -c -o $@
-
-basemul256x1x2.o: basemul256x1.S $(HEADERS)
-	$(CC) -c $(CFLAGS) -DKEM_K=2 -c -o $@ $<
-
-basemul256x1x3.o: basemul256x1.S $(HEADERS)
-	$(CC) -c $(CFLAGS) -DKEM_K=3 -c -o $@ $<
-
-basemul256x1x4.o: basemul256x1.S $(HEADERS)
-	$(CC) -c $(CFLAGS) -DKEM_K=4 -c -o $@ $<
-
-liblightsabermul.a: poly_lightsaber.o polyvec_lightsaber.o $(OBJECTS256NX2)
-	$(AR) -r $@ $^
-
-libsabermul.a: poly_saber.o polyvec_saber.o $(OBJECTS256NX3)
-	$(AR) -r $@ $^
-
-libfiresabermul.a: poly_firesaber.o polyvec_firesaber.o $(OBJECTS256NX4)
-	$(AR) -r $@ $^
 
 test_ntt256n: $(SOURCES256N) $(HEADERS) test_nttn.c cpucycles.c cpucycles.h
 	$(CC) $(CFLAGS) $(SOURCES256N) -DLIGHTSABER test_nttn.c cpucycles.c -o $@
