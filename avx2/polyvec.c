@@ -45,7 +45,18 @@ void polyvec_matrix_vector_mul(polyvec *t, const polyvec a[KEM_K],
     nttpolyvec shat, ahat, t0, t1;
 
     polyvec_ntt(&shat, s, PDATA0);
-    for (i = 0; i < KEM_K; i++) {
+
+    for (i = 0; i < 1; i++) {
+        for (j = 0; j < KEM_K; j++) {
+            if (transpose)
+                poly_ntt(&ahat.vec[j], &a[j].vec[i], PDATA0);
+            else
+                poly_ntt(&ahat.vec[j], &a[i].vec[j], PDATA0);
+        }
+        polyvec_basemul_acc_montgomery(&t0.vec[i], &ahat, &shat, PDATA0);
+    }
+
+    for (i = 1; i < KEM_K; i++) {
         for (j = 0; j < KEM_K; j++) {
             if (transpose)
                 poly_ntt(&ahat.vec[j], &a[j].vec[i], PDATA0);
@@ -56,7 +67,17 @@ void polyvec_matrix_vector_mul(polyvec *t, const polyvec a[KEM_K],
     }
 
     polyvec_ntt(&shat, s, PDATA1);
-    for (i = 0; i < KEM_K; i++) {
+    for (i = 0; i < 1; i++) {
+        for (j = 0; j < KEM_K; j++) {
+            if (transpose)
+                poly_ntt(&ahat.vec[j], &a[j].vec[i], PDATA1);
+            else
+                poly_ntt(&ahat.vec[j], &a[i].vec[j], PDATA1);
+        }
+        polyvec_basemul_acc_montgomery(&t1.vec[i], &ahat, &shat, PDATA1);
+    }
+
+    for (i = 1; i < KEM_K; i++) {
         for (j = 0; j < KEM_K; j++) {
             if (transpose)
                 poly_ntt(&ahat.vec[j], &a[j].vec[i], PDATA1);

@@ -82,7 +82,7 @@
 #define NTT_N 256
 #define NTT_F 1
 #define KEM_Q 8192
-#define KEM_K 4
+#define KEM_K 5
 #endif
 
 #endif

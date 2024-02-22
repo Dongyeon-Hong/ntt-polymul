@@ -81,6 +81,7 @@ vpmullw		%ymm15,%ymm14,%ymm13
 vpmulhw		%ymm15,%ymm14,%ymm14
 #endif
 
+// mult pdata (zeta)
 vpmullw		%ymm1,%ymm3,%ymm3
 vpmullw		%ymm1,%ymm5,%ymm5
 vpmullw		%ymm1,%ymm7,%ymm7
@@ -97,6 +98,7 @@ vpmulhw		%ymm0,%ymm9,%ymm9
 vpmulhw		%ymm0,%ymm11,%ymm11
 vpmulhw		%ymm0,%ymm13,%ymm13
 #endif
+//
 
 vpaddw		%ymm8,%ymm4,%ymm4
 vpaddw		%ymm10,%ymm6,%ymm6
@@ -130,6 +132,25 @@ vpaddw		%ymm6,%ymm3,%ymm3
 vpaddw		%ymm8,%ymm4,%ymm4
 vpsubw		%ymm5,%ymm3,%ymm3
 vpsubw		%ymm7,%ymm4,%ymm4
+#endif
+
+#if KEM_K > 4
+vmovdqa		(1024+32*\off+ 0)*2(%rsi),%ymm10
+vmovdqa		(1024+32*\off+ 0)*2(%rdx),%ymm11
+vmovdqa		(1024+32*\off+16)*2(%rsi),%ymm12
+vmovdqa		(1024+32*\off+16)*2(%rdx),%ymm13
+vpmullw		%ymm11,%ymm10,%ymm5
+vpmulhw		%ymm11,%ymm10,%ymm10
+vpmullw		%ymm13,%ymm12,%ymm11
+vpmulhw		%ymm13,%ymm12,%ymm12
+vpmullw		%ymm1,%ymm5,%ymm5
+vpmullw		%ymm1,%ymm11,%ymm11
+vpmulhw		%ymm0,%ymm5,%ymm5
+vpmulhw		%ymm0,%ymm11,%ymm11
+vpaddw		%ymm10,%ymm3,%ymm3
+vpaddw		%ymm12,%ymm4,%ymm4
+vpsubw		%ymm5,%ymm3,%ymm3
+vpsubw		%ymm11,%ymm4,%ymm4
 #endif
 
 vmovdqa		_16XF_PINV*2(%rcx),%ymm14
